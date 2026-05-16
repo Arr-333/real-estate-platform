@@ -1,0 +1,144 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f0f2f5;
+  font-family: "Segoe UI", sans-serif;
+  padding: 2rem 1rem;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+}
+
+.peekSlider {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  overflow: hidden;
+  padding: 2rem 0 3rem;
+}
+
+.peekTrack {
+  display: flex;
+  align-items: center;
+  /* NO margin tricks. Gap between slides is a fixed 16px */
+  gap: 16px;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Inactive slide */
+.peekSlide {
+  /* Fixed pixel width set via inline style in JSX using sliderRef */
+  flex-shrink: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  transition:
+    transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.5s ease,
+    filter 0.5s ease,
+    box-shadow 0.5s ease;
+  transform: scale(0.78);
+  opacity: 0.4;
+  filter: brightness(0.6) saturate(0.5);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.peekSlide img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Active slide */
+.active {
+  transform: scale(1);
+  opacity: 1;
+  filter: brightness(1) saturate(1);
+  z-index: 3;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+  cursor: default;
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-65%);
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: #333;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  transition:
+    background 0.2s,
+    transform 0.15s;
+}
+.nav:hover {
+  background: #fff;
+}
+.nav:active {
+  transform: translateY(-65%) scale(0.92);
+}
+.prev {
+  left: 8px;
+}
+.next {
+  right: 8px;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.18);
+  transition:
+    background 0.3s,
+    transform 0.3s;
+  cursor: pointer;
+}
+
+.dotActive {
+  background: #111;
+  transform: scale(1.35);
+}
+
+.imageCount {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.06em;
+}
+
+.empty {
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 15px;
+}

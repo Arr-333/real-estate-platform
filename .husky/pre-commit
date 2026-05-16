@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Run lint-staged which will format, fix, and check lint errors
+npx lint-staged
+
+# Exit with the exit code from lint-staged
+# If lint-staged fails (non-zero exit), the commit will be aborted
+exit $?

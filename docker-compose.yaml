@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:8.0 # Or your desired MySQL version
+    container_name: nextjs_prisma_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: nextjs_db
+      MYSQL_USER: nextjs_user
+      MYSQL_PASSWORD: nextjs_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:

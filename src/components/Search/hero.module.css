@@ -1,0 +1,139 @@
+.hero {
+  background-image: url("/07-sanfrancisconnn.jpg"); /* ✅ Correct path for Next.js public folder */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  color: rgb(0, 0, 0);
+
+  height: auto; /* let content decide */
+  min-height: 80vh; /* optional, so it doesn't collapse if content is small */
+  padding: 4rem 0; /* top & bottom spacing */
+}
+
+.overlay-hero {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.wrapper-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-heading {
+  font-size: 2.5rem;
+  font-weight: bold;
+  display: block;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.search-type-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.search-type-tabs li {
+  padding: 10px 20px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.search-type-tabs li:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.search-type-tabs li.selected {
+  background: #ffffff;
+  color: #000;
+  font-weight: bold;
+}
+.heroBox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 42rem;
+  margin: auto;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.301);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  height: 15rem;
+}
+
+.tabList {
+  display: flex;
+  justify-content: space-around;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.tabList li {
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.activeTab {
+  background: #f50707;
+  color: white;
+}
+
+.contentBox {
+  display: flex;
+  /* flex-direction: column; */
+  gap: 12px;
+}
+
+.item {
+  padding: 10px;
+  background: rgba(255, 255, 255, 0);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.paginationBtns {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.paginationBtns button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.paginationBtns button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ips {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 15px;
+  border-radius: 25px;
+  background-color: aliceblue;
+  border: none;
+  outline: none;
+  padding-left: 35px !important;
+}

@@ -1,0 +1,601 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//======PROPERTY ENUMS=======
+
+
+enum PropertyTypeStatus {
+  ACTIVE
+  INACTIVE
+  ACCEPTED
+  REJECTED
+  COMING_SOON
+}
+
+enum StateStatus {
+  Active
+  Inactive
+  ComingSoon
+}
+
+enum FurnishedStatus {
+  FULLY_FURNISHED
+  SEMI_FURNISHED
+  UNFURNISHED
+}
+
+enum RentalTerm {
+  MONTHS_11
+  YEARS_4_11
+  YEARS_9_11
+}
+
+enum AvailabilityStatus {
+  IMMEDIATE
+  COMING_SOON
+  ON_NOTICE
+}
+
+enum PropertyListStatus {
+  ACTIVE
+  DEACTIVE
+  ACCEPTED
+  REJECTED
+  PENDING_SITE_VISIT
+  APPROVED_SITE_VISIT
+  REJECTED_SITE_VISIT
+  IN_PROGRESS
+  PROCESSING
+  SOLD
+}
+enum RentType {
+  PER_MONTH
+  PER_SQFT
+}
+
+
+
+// ===== CRM / ACTIVITY ENUMS =====
+
+
+enum SiteVisitMode {
+  IN_PERSON
+  VIRTUAL
+}
+
+enum SiteVisitStatus {
+  PENDING
+  CONFIRM
+}
+
+enum ClientPipelineStatus {
+  INQUIRY  
+  SITE_VISIT
+  NEGOTIATION
+  CLOSED
+  DOCS_LEGAL_PROCESS
+}
+
+
+
+// ===== BUSINESS ENTITY ENUMS =====
+
+
+enum OwnerType {
+  INDIVIDUAL
+  CORPORATE
+}
+
+
+
+
+
+// ===== ADMIN ENUMS =====
+
+enum AdminClientType {
+  PROPERTY_LISTER   // ONLY owner / broker
+}
+
+
+
+
+
+
+
+///////////// AUTH SYSTEM//////////////////
+
+
+
+
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String?
+  email    String  @unique
+  phone    String?
+  password String?
+
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [id])
+
+  address String?
+  pin     String?
+  city    String?
+  state   String?
+  image   String?
+
+  otp          Int?
+  otpExpiresAt DateTime?
+
+  isGoogleUser    Boolean @default(false)
+  isEmailVerified Boolean @default(false)
+  isActive        Boolean @default(false)
+
+
+  emailVerifyToken  String?
+  emailVerifyExp    DateTime?
+
+  createdAt DateTime @default(now())
+
+  accounts Account[]
+  sessions Session[]
+
+  broker Broker? // optional 1-to-1
+  owner    Owner?
+  customer Customer?
+
+  createdPropertyTypes PropertyType[] @relation("UserCreatedPropertyTypes")
+  createdProperties    Property[]     @relation("PropertyCreator")
+  updatedProperties    Property[]     @relation("PropertyUpdater")
+
+  
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
+
+  users User[]
+
+  createdAt DateTime @default(now())
+}
+
+model Account {
+  id                Int     @id @default(autoincrement())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+//***************BROKER******************//
+
+model Broker {
+  id        Int  @id @default(autoincrement())
+  userId    Int  @unique
+  companyId Int?
+
+ 
+  location    String?
+  phoneOffice String?
+  phoneMobile String?
+  about       String?
+  language    String?
+  bio         String?
+
+  createdAt DateTime @default(now())
+
+  user    User     @relation(fields: [userId], references: [id])
+  company Company? @relation(fields: [companyId], references: [id])
+  properties Property[]
+  clientActivities ClientActivity[]
+}
+
+
+//**************OWNER*******************//
+
+
+model Owner {
+  id        Int       @id @default(autoincrement())
+  userId    Int?      @unique
+  type      OwnerType
+
+  companyName String?
+  companyGST  String?
+  companyPAN  String?
+
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  user       User?     @relation(fields: [userId], references: [id])
+  properties Property[]
+  clientActivities ClientActivity[]
+
+}
+
+
+//***********CUSTOMER****************//
+
+
+model Customer {
+  id        Int        @id @default(autoincrement())
+  userId    Int?       @unique
+
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  user User? @relation(fields: [userId], references: [id])
+  siteVisits SiteVisit[]
+  activities ClientActivity[]
+  wishlists Wishlist[]
+}
+
+
+
+model Company {
+  id       Int    @id @default(autoincrement())
+  name     String
+  location String
+  about    String
+  logo     String
+  website  String
+
+  brokers   Broker[] // 1 Company -> Many Brokers
+  createdAt DateTime @default(now())
+}
+
+
+
+//**************MARKITING**************//
+
+model ContactUs {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String
+  subject   String
+  message   String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+  id         Int      @id @default(autoincrement())
+  name       String
+  profession String
+  message    String
+  image      String   @default("")
+  createdAt  DateTime @default(now())
+}
+
+model Newsletter {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+
+//************PROPERTY CLASSIFICATION**************//
+
+model PropertyType {
+  id          Int                @id @default(autoincrement())
+  name        String             @unique
+  status      PropertyTypeStatus @default(INACTIVE)
+
+  image       String?
+
+  createdAt   DateTime           @default(now())
+  createdById Int?
+  createdBy   User?              @relation("UserCreatedPropertyTypes", fields: [createdById], references: [id])
+
+  properties Property[]
+
+}
+
+
+
+model State {
+  stateId     Int     @id @default(autoincrement())
+  stateName   String
+  stateStatus StateStatus  
+
+  image       String?   
+
+
+
+  cities      City[]
+  properties Property[]
+}
+
+model City {
+  cityId    Int    @id @default(autoincrement())
+  cityName  String
+
+
+  image       String?   
+
+  lat       String?   
+  lng       String? 
+
+  stateId   Int
+  state     State  @relation(fields: [stateId], references: [stateId], onDelete: Cascade)
+
+  properties Property[]
+}
+
+
+
+
+
+
+
+
+
+//////////////////////
+// PROPERTY
+//////////////////////
+
+
+
+
+
+
+
+
+model Property {
+  propertyListId Int @id @default(autoincrement()) @map("id")
+
+  // 🔒 Keep Foreign Keys Required
+  propertyTypeId   Int   @map("propTypeId")
+  propertyCityId   Int @map("cityId")
+  propertyStateId  Int @map("stateId")
+  propertyBrokerId Int?
+  ownerId Int?
+
+
+  createdBy     Int
+  lastUpdatedBy Int @map("updatedBy")
+
+  // 🧪 Make Business Fields Optional For Testing
+  propertyTitle     String  @map("title")
+  propertySize      Int     @map("sizeSqFt")
+  propertyDimension Int?    @map("dimensionSqFt")
+
+  propertyFurnishedStatus FurnishedStatus @map("furnitureStatus")
+  propertyHasPantryArea    Boolean        @map("hasPantry")
+  propertyHasWashArea      Boolean        @map("hasWashArea")
+  propertyNoOfWashAreas    Int?            @map("washAreaCount")
+
+ propertyRentalTerm RentalTerm @map("rentalTerm")
+  propertyRent       Decimal    @map("rentAmount") @db.Decimal(10,2)
+  propertyRentType   RentType?   @map("rentUnit")
+  propertyAvailability AvailabilityStatus @map("availability")
+  propertyAvailabilityDate DateTime? @map("availabilityDate")
+  propertyAvailabilityDateDate String?
+
+  propertyAddressLine1 String @map("addressLine1")
+  propertyAddressLine2 String? @map("addressLine2")
+  propertyAddressLine3 String? @map("addressLine3")
+  propertyLocal        String? @map("locality")
+
+  propertyLatitude  String @map("latitude")
+  propertyLongitude String @map("longitude")
+
+  propertyPO        String?
+  propertyGooglePO  String?
+
+  propertyOwnerName         String @map("ownerName")
+  propertyOwnerContactEmail String? @map("ownerEmail")
+  propertyOwnerContactPhone String? @map("ownerPhone")
+
+  propertyRegistration          Boolean @map("isRegistered")
+  propertyRegistrationDetails   String?  @map("registrationDetails")
+  propertyRegistrationAuthority String?  @map("registrationAuthority")
+  propertyRegistrationVerified  Boolean @map("registrationVerified")
+  propertyOtherCertification    String?
+
+propertyDescriptionContent String? @map("description") @db.Text
+propertyAbout String? @map("about") @db.Text
+
+  propertyListStatus PropertyListStatus @map("listStatus")
+
+
+  // 📊 Counters (keep defaults)
+ propertyImpressions Int @default(0) @map("impressions")
+  propertyLikes       Int @default(0) @map("likes")
+  propertyPageVisits  Int @default(0) @map("pageVisits")
+
+  propertyCreatedOn DateTime @default(now()) @map("createdAt")
+  propertyUpdatedOn DateTime @updatedAt @map("updatedAt")
+
+  // 🔗 Required Relations
+  propertyType PropertyType @relation(fields: [propertyTypeId], references: [id])
+  city         City         @relation(fields: [propertyCityId], references: [cityId])
+  state        State        @relation(fields: [propertyStateId], references: [stateId])
+  broker       Broker?       @relation(fields: [propertyBrokerId], references: [id])
+  creator      User         @relation("PropertyCreator", fields: [createdBy], references: [id])
+  updater      User?        @relation("PropertyUpdater", fields: [lastUpdatedBy], references: [id])
+  owner   Owner? @relation(fields: [ownerId], references: [id])
+
+  images      PropertyImage[]
+  documents   PropertyDocument[]
+  suitability PropertySuitability[]
+  nearby      PropertyNearby[]
+  siteVisits SiteVisit[]
+  clientActivities ClientActivity[]
+  spaces     PropertySpace[]
+  highlights PropertyHighlight[]
+  wishlists Wishlist[]
+
+  // 📈 Indexes
+  @@index([propertyCityId])
+  @@index([propertyStateId])
+  @@index([propertyRent])
+  @@index([propertyListStatus])
+}
+
+
+
+
+model PropertyImage {
+  id         Int @id @default(autoincrement())
+  propertyId Int
+  imageUrl   String
+  imageDesc  String?
+  imageType  String
+
+  property Property @relation(fields: [propertyId], references: [propertyListId], onDelete: Cascade)
+}
+
+model PropertyDocument {
+  id         Int @id @default(autoincrement())
+  propertyId Int
+  docUrl     String
+  docType    String
+
+  property Property @relation(fields: [propertyId], references: [propertyListId], onDelete: Cascade)
+}
+
+model PropertySuitability {
+  id         Int @id @default(autoincrement())
+  propertyId Int
+  name       String
+
+  property Property @relation(fields: [propertyId], references: [propertyListId], onDelete: Cascade)
+}
+
+model PropertyNearby {
+  id         Int @id @default(autoincrement())
+  propertyId Int
+  placeName  String
+
+  property Property @relation(fields: [propertyId], references: [propertyListId], onDelete: Cascade)
+}
+
+model PropertySpace {
+  id         Int    @id @default(autoincrement())
+  propertyId Int
+
+  name       String   // "9th Floor, Suite 901"
+  size       Int
+  term       String
+  rate       Decimal  @db.Decimal(10,2)
+  use        String
+  condition  String
+  available  String
+  description String?
+
+  property Property @relation(fields: [propertyId], references: [propertyListId], onDelete: Cascade)
+
+  features PropertySpaceFeature[]
+}
+
+model PropertySpaceFeature {
+  id       Int @id @default(autoincrement())
+  spaceId  Int
+  name     String
+
+  space PropertySpace @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+}
+
+model PropertyHighlight {
+  id         Int @id @default(autoincrement())
+  propertyId Int
+  text       String
+
+  property Property @relation(fields: [propertyId], references: [propertyListId], onDelete: Cascade)
+}
+
+
+
+/////////// FOR OWNER TRACK RECORD ///////////
+
+model SiteVisit {
+  id         Int              @id @default(autoincrement())
+  customerId Int
+  propertyId Int
+
+  mode   SiteVisitMode
+  status SiteVisitStatus @default(PENDING)
+
+  scheduledAt DateTime
+  completedAt DateTime?
+
+  notes String?
+
+  createdAt DateTime @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  property Property @relation(fields: [propertyId], references: [propertyListId])
+}
+
+////////////// CUSTOMER ACTIVITY////////////////
+
+model ClientActivity {
+  id         Int                  @id @default(autoincrement())
+  customerId Int
+  propertyId Int?
+  brokerId   Int?
+  ownerId   Int?
+
+  status ClientPipelineStatus
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  broker   Broker? @relation(fields: [brokerId], references: [id])
+  owner    Owner? @relation(fields: [ownerId], references: [id])
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  property Property? @relation(fields: [propertyId], references: [propertyListId])
+}
+
+
+model Wishlist {
+  id         Int      @id @default(autoincrement())
+  customerId Int
+  propertyId Int
+
+  createdAt  DateTime @default(now())
+
+
+  customer   Customer @relation(fields: [customerId], references: [id]) 
+  property   Property @relation(fields: [propertyId], references: [propertyListId])
+
+  @@unique([customerId, propertyId]) // prevent duplicates
+}

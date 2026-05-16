@@ -1,0 +1,185 @@
+/* ───────── ROOT ───────── */
+.container {
+  font-family: "DM Sans", "Segoe UI", sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f9fafb;
+  color: #111827;
+}
+
+/* ───────── HEADER ───────── */
+.header {
+  height: 56px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+}
+
+.logoBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  background: #c8102e;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 900;
+}
+
+.nav {
+  display: flex;
+  gap: 18px;
+  margin-left: auto;
+}
+
+/* ───────── SEARCH ───────── */
+.searchBar {
+  flex: 1;
+  max-width: 520px;
+  display: flex;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 13.5px;
+  padding: 0 10px;
+}
+
+.searchBtn {
+  background: #c8102e;
+  color: #fff;
+  border: none;
+  padding: 0 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ───────── FILTER BAR ───────── */
+.filterBar {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.select {
+  padding: 6px 12px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #374151;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* ───────── LAYOUT ───────── */
+.body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 440px;
+  min-width: 440px;
+  overflow-y: auto;
+  padding: 16px;
+  background: #f9fafb;
+  border-right: 1px solid #e5e7eb;
+}
+
+.mapContainer {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ───────── CARD ───────── */
+.card {
+  display: flex;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-bottom: 12px;
+  min-height: 140px;
+}
+
+.activeCard {
+  border: 2px solid #c8102e;
+  box-shadow: 0 4px 20px rgba(200, 16, 46, 0.15);
+}
+
+.cardImage {
+  width: 140px;
+  min-width: 140px;
+  object-fit: cover;
+}
+
+.cardContent {
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.cardAddress {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.price {
+  font-weight: 800;
+  color: #c8102e;
+}
+
+/* ───────── BUTTONS ───────── */
+.btnPrimary {
+  background: #c8102e;
+  color: #bd2828;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btnOutline {
+  background: #fff;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
