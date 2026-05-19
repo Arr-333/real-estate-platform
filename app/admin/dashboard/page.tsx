@@ -8,7 +8,7 @@ import TotalProperty from "@/components/dashboard/admin/TotalProperty";
 import SalesChart from "@/components/dashboard/admin/SaleChart";
 import QuickActions from "@/components/dashboard/admin/QuickActions";
 import SalesInsight from "@/components/dashboard/admin/SaleInsight";
-import TopLocations from "@/components/dashboard/TopLocations";
+import TopLocations from "@/components/dashboard/topLocations";
 import UpcomingEvent from "@/components/dashboard/admin/UpComingEvent";
 
 export default function page() {
