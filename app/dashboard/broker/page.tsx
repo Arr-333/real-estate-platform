@@ -2,7 +2,7 @@ import React from "react";
 
 import Sidebar from "@/components/dashboard/sidebar";
 import Topper from "@/components/dashboard/broker/Topper";
-import TopLocations from "@/components/dashboard/TopLocations";
+import TopLocations from "@/components/dashboard/topLocations";
 import BrokerDetails from "@/components/dashboard/broker/BrokerDeatil";
 import ClientList from "@/components/dashboard/broker/ClientList";
 import Metric from "@/components/dashboard/broker/Metric";
