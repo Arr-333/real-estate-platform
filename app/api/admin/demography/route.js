@@ -22,7 +22,7 @@ const getAll = async () => {
 // =========================
 // POST create demographics
 // =========================
-export async function POST(request) {
+const create = async (request) => {
   try {
     const payload = await request.json();
 
@@ -51,7 +51,7 @@ export async function POST(request) {
       { status: 500 }
     );
   }
-}
+};
 //
 export const POST = withAuth(create, ACCESS_CONTROL.demography.create);
 export const GET = withAuth(getAll, ACCESS_CONTROL.demography.getAll);
