@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "../../../../../src/lib/prisma";
 import { withAuth } from "../../../../../src/lib/withAuth";
-import { ACCESS_CONTROL } from "../../../src/lib/accessControl";
+import { ACCESS_CONTROL } from "../../../../../src/lib/accessControl";
 
 // DELETE company
 const remove = async (request, context) => {
