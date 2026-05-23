@@ -1,13 +1,13 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import axios from "axios";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import { toast } from "react-toastify";
 import { validateEmail } from "../../../src/components/validations";
 
-export default function EmailVerificationPage() {
+function EmailVerificationPage() {
   const searchParams = useSearchParams();
   const queryEmail = searchParams.get("email");
 
@@ -72,5 +72,12 @@ export default function EmailVerificationPage() {
         Send Verification Link
       </Button>
     </Box>
+  );
+}
+export default function page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EmailVerificationPage />
+    </Suspense>
   );
 }

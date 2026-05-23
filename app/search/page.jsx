@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { Suspense, useState, useEffect } from "react";
 import styles from "./searchpage.module.css";
 import dynamic from "next/dynamic";
 import Filterbar from "../../src/components/Filterbar";
@@ -11,7 +11,7 @@ const Maped = dynamic(() => import("../../src/components/Mapped"), {
   ssr: false,
 });
 
-export default function GlobalSearch() {
+function GlobalSearchContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -70,6 +70,7 @@ export default function GlobalSearch() {
   useEffect(() => {
     console.log("URL PARAMS:", searchParams.toString());
   }, [searchParams]);
+
   return (
     <div className={styles.container}>
       <Filterbar
@@ -87,7 +88,9 @@ export default function GlobalSearch() {
             <div key={l.id}>
               <Link href={`/singlepage/${l.id}`} className="prop-card">
                 <div
-                  className={`${styles.card} ${activeId === l.id ? styles.activeCard : ""}`}
+                  className={`${styles.card} ${
+                    activeId === l.id ? styles.activeCard : ""
+                  }`}
                   onClick={() => setActiveId(l.id)}
                 >
                   <img src={l.image} className={styles.cardImage} />
@@ -120,5 +123,13 @@ export default function GlobalSearch() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function GlobalSearch() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <GlobalSearchContent />
+    </Suspense>
   );
 }

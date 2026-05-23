@@ -4,10 +4,10 @@ import { prisma } from "@/lib/prisma";
 export default async function VerifyPage({
   searchParams,
 }: {
-  searchParams: { token?: string };
+  searchParams: Promise<{ token?: string }>;
 }) {
-  const token = searchParams.token;
-
+  const params = await searchParams;
+  const token = params.token;
   if (!token) redirect("/");
 
   const user = await prisma.user.findFirst({

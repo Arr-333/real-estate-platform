@@ -1,10 +1,10 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import React, { Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
-import { useRouter } from "next/navigation";
-
-export default function VerificationPage() {
+/* ---------- CONTENT ---------- */
+function VerificationMailContent() {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
 
@@ -50,25 +50,40 @@ export default function VerificationPage() {
           backgroundColor: "#eeeeee",
           borderRadius: "5px",
           marginRight: "10px",
+          border: "none",
         }}
       >
         Open Your Email
       </button>
-      {/* <button
-                onClick={() => router.push("/verification/reverify-email")} style={{
-                    marginTop: "20px",
-                    padding: "12px 24px",
-                    fontSize: "16px",
-                    cursor: "pointer",
-                    color: "red",
-                    fontWeight: 600,
-                    backgroundColor: "#eeeeee",
-                    borderRadius: "5px",
-                    marginLeft: "10px",
-                }}
-            >
-                Reverify Email
-            </button> */}
+
+      {/* Uncomment if needed
+      <button
+        onClick={() => router.push("/verification/reverify-email")}
+        style={{
+          marginTop: "20px",
+          padding: "12px 24px",
+          fontSize: "16px",
+          cursor: "pointer",
+          color: "red",
+          fontWeight: 600,
+          backgroundColor: "#eeeeee",
+          borderRadius: "5px",
+          marginLeft: "10px",
+          border: "none",
+        }}
+      >
+        Reverify Email
+      </button>
+      */}
     </div>
+  );
+}
+
+/* ---------- PAGE ---------- */
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerificationMailContent />
+    </Suspense>
   );
 }
