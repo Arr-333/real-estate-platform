@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { buildSolrQuery } from "../../../src/lib/solr/client";
-import { solrSearch } from "../../../src/lib/search/buildQuery";
+import { buildSolrQuery } from "../../../src/lib/search/buildQuery";
+import { solrSearch } from "../../../src/lib/solr/client";
 import { withAuth } from "../../../src/lib/withAuth";
 import { ACCESS_CONTROL } from "../../../src/lib/accessControl";
 
